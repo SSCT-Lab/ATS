@@ -1,6 +1,5 @@
 import numpy as np
 
-# 4. 错误模式计算
 from ATS import ats_config
 from ATS.steps.Utils import ATSUtils
 

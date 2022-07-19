@@ -5,11 +5,7 @@ from ATS.selection.AbsSelectStrategy import AbsSelectStrategy
 from utils.utils import get_data_by_label_with_idx
 
 
-# 每个数据只计算第一次覆盖长度
-# 不进行迭代Adaptive计算
-# 根据该长度排序
-# 弃用 @deprecated
-
+#  @deprecated
 class CTMSelectStrategy(AbsSelectStrategy):
 
     # ctm
@@ -20,7 +16,6 @@ class CTMSelectStrategy(AbsSelectStrategy):
         C_select_i_map = defaultdict(list)
         X_no_i = []
         ck_list_map = self.pattern_fitness_step.get_ck_list_map(S_mid, n, i)
-        ### 将 get_ck_list_map reshpe一下
         C_Xr_list = list(map(list, zip(*ck_list_map.values())))
         if len(idx_mid) != len(C_Xr_list):
             raise ValueError("len idx not eq len data")

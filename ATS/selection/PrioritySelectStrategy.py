@@ -8,11 +8,6 @@ import pandas as pd
 from utils.utils import get_data_by_label_with_idx
 
 
-# 根据每个数据的错误模式覆盖大小排序
-# 在区域内的选取的数据有顺序
-# 区域外的数据无顺序
-
-# 使用排序表优化了cam
 class PrioritySelectStrategy(AbsSelectStrategy):
 
     def sort_ix_by_len(self, x_all, x_all_len):

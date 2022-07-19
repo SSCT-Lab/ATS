@@ -1,7 +1,6 @@
 from ATS import ats_config
 
 
-# 1. 测试数据聚类
 class ClusterTestStep(object):
     def split_data_region_with_idx(self, Tx_prob_matrixc, i, idx):
         Tx_i_prob_vec = Tx_prob_matrixc[:, i]

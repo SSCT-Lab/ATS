@@ -59,7 +59,7 @@ class Dau(object):
             op_list.append(op)
         return op_list
 
-    def get_op_abbr(self, k):  # 获得缩写名字
+    def get_op_abbr(self, k):
         return k
 
     def get_data_save_path(self):
@@ -71,8 +71,7 @@ class Dau(object):
         (x_train, y_train), (x_test, y_test) = self.load_data(use_norm=False)
         params = self.get_dau_params()
         # for i in range(num):
-        # 每个算子只扩增1份就够了
-        for k, v in params.items():  # 每种扩增算子单独扩增成1种
+        for k, v in params.items():
             img_list = []
             label_list = []
             dau_op_name = k
@@ -102,7 +101,6 @@ class Dau(object):
         params = self.get_dau_params()
 
         # for i in range(num):
-        # 每个算子只扩增1份就够了
         x, y = x_test[0], y_test[0]
         print('ori')
         if is_mnist:
