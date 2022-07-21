@@ -3,6 +3,8 @@ import os
 import time
 from collections import defaultdict
 import numpy as np
+from tqdm import tqdm
+
 from ATS.selection.AbsSelectStrategy import AbsSelectStrategy
 import pandas as pd
 from utils.utils import get_data_by_label_with_idx
@@ -65,7 +67,7 @@ class PrioritySelectStrategy(AbsSelectStrategy):
         Xr_others_len = []  # left idx with cov length
 
         idx_others = []
-        for i in range(n):
+        for i in tqdm(range(n)):
             csv_data["label"] = i
             Tx_i, Ty_i, T_idx_arr = get_data_by_label_with_idx(Tx, Ty, i)
             Tx_prob_matrixc = M.predict(Tx_i)
@@ -95,7 +97,6 @@ class PrioritySelectStrategy(AbsSelectStrategy):
             # cov
             s_pq_arr = self.pattern_fitness_step.get_cov_length_map(C_select_i_map, n, i, )
             s, c_i = self.pattern_fitness_step.get_cov_s_and_c(s_pq_arr, n)
-            print("cov rate ", c_i)
             csv_data["div"] = c_i
             c_arr.append(c_i)
 
@@ -129,7 +130,6 @@ class PrioritySelectStrategy(AbsSelectStrategy):
         return Xr_select, Xr_select_len, Xr_others, Xr_others_len, c_arr, max_size_arr, idx_others
 
     def get_priority_sequence_detail(self, S_mid, n, i, idx_mid, use_add=False, th=0.001, use_fine=False):
-        print("th", th, "use_add", use_add)
         temp_c_arr = []
         rel_mid_idx = []
         idx_max_diff_arr = []
@@ -139,7 +139,7 @@ class PrioritySelectStrategy(AbsSelectStrategy):
 
         C_select_i_map = defaultdict(list)
         X_no_i = []
-        ck_list_map = self.ats_utils.get_ck_list_map(S_mid, n, i)
+        ck_list_map = self.get_ck_list_map(S_mid, n, i)
         C_Xr_list = list(map(list, zip(*ck_list_map.values())))
         # if len(idx_mid) != len(C_Xr_list):
         #     raise ValueError("len idx not eq len data")
@@ -150,7 +150,6 @@ class PrioritySelectStrategy(AbsSelectStrategy):
         all_rank_arr.sort(key=lambda x: (x[1]), reverse=False)
         all_rank_idx = np.array(all_rank_arr)[:, 0].astype("int").tolist()
         all_rank_cov_len = np.array(all_rank_arr)[:, 1].tolist()
-        print(i, "************************************", time.time())
         max_size = 0
         while True:
             max_s_i = 0
@@ -158,7 +157,7 @@ class PrioritySelectStrategy(AbsSelectStrategy):
             max_s_diff = 0
             max_Cr_select_i_map = None
             s_c_select = self.pattern_fitness_step.get_cov_pair_map_len(C_select_i_map, n, i)
-            c = self.pattern_fitness_step.gget_cov_c(s_c_select, n)
+            c = self.pattern_fitness_step.get_cov_c(s_c_select, n)
             temp_c_arr.append(c)
             # print("# current no select data point", len(X_no_i))
             all_rank_cov_len_copy = all_rank_cov_len.copy()
@@ -168,8 +167,8 @@ class PrioritySelectStrategy(AbsSelectStrategy):
                 if j in X_no_i:
                     continue
                 Cx = C_Xr_list[j]
-                Cx_insert = self.pattern_fitness_step.gunion_cov_maps(Cx, C_select_i_map, X_no_i)
-                Cx_union = self.pattern_fitness_step.gstatistic_union_map(Cx_insert, n, i)
+                Cx_insert = self.pattern_fitness_step.union_cov_maps(Cx, C_select_i_map, X_no_i)
+                Cx_union = self.pattern_fitness_step.statistic_union_map(Cx_insert, n, i)
                 s_c_union = self.pattern_fitness_step.get_cov_pair_map_len(Cx_union, n, i)
                 s_diff = s_c_union - s_c_select
                 if abs(s_diff) <= th:
@@ -213,7 +212,6 @@ class PrioritySelectStrategy(AbsSelectStrategy):
                             cov_len = all_rank_cov_len[j]
                             ctm_max_diff_arr.append(cov_len)
                     e = time.time()
-                    print("ctm time: ", e - s)
                     break
                 else:
                     break

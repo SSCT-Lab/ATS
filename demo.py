@@ -76,7 +76,8 @@ def retrain(model_path, x, y, base_path):
     M = load_model(model_path)
     filepath = os.path.join(base_path, "temp.h5")
     trained_model = train_model(M, filepath, x,
-                                keras.utils.np_utils.to_categorical(y, 10), x_val, y_val)
+                                keras.utils.np_utils.to_categorical(y, 10), x_val,
+                                keras.utils.np_utils.to_categorical(y_val, 10))
     acc_val1 = trained_model.evaluate(x_val, keras.utils.np_utils.to_categorical(y_val, 10))[1]
     print("retrain model path: {}".format(filepath))
     print("ATS. train acc improve {} -> {}".format(acc_val0, acc_val1))
@@ -102,19 +103,19 @@ if __name__ == '__main__':
     model_path = model_conf.get_model_path(model_conf.mnist, model_conf.LeNet5)
     ori_model = load_model(model_path)
 
-    acc = ori_model.evaluate(x_test, keras.utils.np_utils.to_categorical(y_test, 10))[1]
+    acc = ori_model.evaluate(x_test, keras.utils.np_utils.to_categorical(y_test, 10), verbose=0)[1]
     print("ori test accuracy {}".format(acc))
 
     # data augmentation
     color_print("data augmentation", "blue")
-    dau.run("test")
+    # dau.run("test")
     x_dau, y_dau = dau.load_dau_data("SF", use_cache=False)
     x_dau, y_dau = shuffle_data(x_dau, y_dau)
 
     # selection
     color_print("adaptive test selection on the augmented data", "blue")
     x_sel, y_sel, x_val, y_val = get_tests(x_dau, y_dau)
-    acc_val0 = ori_model.evaluate(x_val, keras.utils.np_utils.to_categorical(y_val, 10))[1]
+    acc_val0 = ori_model.evaluate(x_val, keras.utils.np_utils.to_categorical(y_val, 10), verbose=0)[1]
 
     y_sel_psedu = get_psedu_label(ori_model, x_sel)
     div_rank, _, _ = ats.get_priority_sequence(x_sel, y_sel_psedu, nb_classes, ori_model, th=0.001)
@@ -128,7 +129,7 @@ if __name__ == '__main__':
     # ATS
     xs_num, ys_num, ys_psedu_num = xs[:num], ys[:num], ys_psedu[:num]
     # Random
-    xr, yr, yr_psedu = shuffle_data3(x_sel, y_sel, ys_psedu)
+    xr, yr, yr_psedu = shuffle_data3(x_sel, y_sel, y_sel_psedu)
     xr_num, yr_num, yr_psedu_num = xr[:num], yr[:num], yr_psedu[:num]
 
     # fault detection
