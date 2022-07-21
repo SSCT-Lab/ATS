@@ -80,7 +80,7 @@ def retrain(model_path, x, y, base_path):
                                 keras.utils.np_utils.to_categorical(y_val, 10))
     acc_val1 = trained_model.evaluate(x_val, keras.utils.np_utils.to_categorical(y_val, 10))[1]
     print("retrain model path: {}".format(filepath))
-    print("ATS. train acc improve {} -> {}".format(acc_val0, acc_val1))
+    print("train acc improve {} -> {}".format(acc_val0, acc_val1))
     return acc_val1
 
 
