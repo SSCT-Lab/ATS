@@ -103,7 +103,14 @@ If you want to reproduce our experiment:
 Please cite the following paper if `ATS(adaptive test selection)` helps you on the research:
 
 ```.
-
+@inproceedings{ATS,
+  title={Adaptive test selection for deep neural networks},
+  author={Gao, Xinyu and Feng, Yang and Yin, Yining and Liu, Zixi and Chen, Zhenyu and Xu, Baowen},
+  booktitle={2022 IEEE/ACM 44th International Conference on Software Engineering (ICSE)},
+  pages={73--85},
+  year={2022},
+  organization={IEEE}
+}
 ```
 
 
