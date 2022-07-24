@@ -51,13 +51,13 @@ If you want to reproduce our experiment:
 
 1. initial  models and datasets
 
-   - you candownload by this link
+   - you can download by this link
 
      link： https://pan.baidu.com/s/1Bi6qcN6Tc0esxcH7RbMWiQ
      
      code：atse
 
-   - or initial  by python files
+   - or initial  by python scrips
 
      1. initial dirs , svhn data and models
 
